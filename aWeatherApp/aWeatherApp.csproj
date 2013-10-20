@@ -70,7 +70,11 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\City.cs" />
+    <Compile Include="Model\CityForecast.cs" />
+    <Compile Include="Model\CityInForecast.cs" />
     <Compile Include="Model\CityList.cs" />
+    <Compile Include="Model\ForecastList.cs" />
+    <Compile Include="Model\ForecastTemperatures.cs" />
     <Compile Include="Model\LocationData.cs" />
     <Compile Include="Model\Weather.cs" />
     <Compile Include="Model\WeatherExtraInfo.cs" />

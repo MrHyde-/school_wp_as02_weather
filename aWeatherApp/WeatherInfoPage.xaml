@@ -22,27 +22,20 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock x:Name="ApplicationTitle" Text="akWeather" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock x:Name="textBlockLocation" Text="page name" Margin="9,-10,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBlock Height="104" HorizontalAlignment="Left" Margin="230,157,0,0" Name="textBlockTemperature" Text="TextBlock" VerticalAlignment="Top" Style="{StaticResource PhoneTextTitle1Style}" Width="226" />
-            <TextBlock Height="38" HorizontalAlignment="Left" Margin="0,286,0,0" Name="textBlockWeatherTime" Style="{StaticResource PhoneTextNormalStyle}" Text="TextBlock" VerticalAlignment="Top" Width="224" />
-            <Image Height="100" HorizontalAlignment="Left" Margin="0,111,0,0" Name="imageWeather" Stretch="Fill" VerticalAlignment="Top" Width="100" />
+            <TextBlock Height="104" HorizontalAlignment="Left" Margin="200,20,0,0" Name="textBlockTemperature" Text="TextBlock" VerticalAlignment="Top" Style="{StaticResource PhoneTextTitle1Style}" Width="226" />
+            <Image Height="100" HorizontalAlignment="Left" Margin="10,20,0,0" Name="imageWeather" Stretch="Fill" VerticalAlignment="Top" Width="100" />
+            <TextBlock Height="38" HorizontalAlignment="Left" Margin="202,100,0,0" Name="textBlockWeatherTime" Style="{StaticResource PhoneTextNormalStyle}" Text="TextBlock" VerticalAlignment="Top" Width="224" />
+            <TextBlock Height="38" HorizontalAlignment="Left" Margin="0,169,0,0" Name="textBlockForecasts" Style="{StaticResource PhoneTextNormalStyle}" Text="Forecasts" VerticalAlignment="Top" Width="224" />
         </Grid>
-    </Grid>
- 
-    <!--Sample code showing usage of ApplicationBar-->
-    <!--<phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
-                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>-->
-
+        
+        <StackPanel x:Name="ForecastsPanel" Grid.Row="1" Margin="2,200,0,0" Orientation="Vertical">
+        
+        </StackPanel>
+     </Grid>
 </phone:PhoneApplicationPage>

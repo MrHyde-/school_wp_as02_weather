@@ -27,6 +27,24 @@ namespace aWeatherApp
         }
 
         /// <summary>
+        /// App level Weather instance
+        /// Because Json returns it straight, we don't want to fetch it over again..
+        /// </summary>
+        private static ForecastList _forecasts;
+        public static ForecastList ForeCastModel
+        {
+            get
+            {
+                if (_forecasts == null)
+                {
+                    _forecasts = new ForecastList();
+                }
+                return _forecasts;
+            }
+            set { _forecasts = value; }
+        }
+
+        /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
         /// <returns>The root frame of the Phone Application.</returns>

@@ -23,27 +23,24 @@ namespace aWeatherApp
         #region JSON
         private void HandleJSON(object sender, RoutedEventArgs e)
         {
-                // create an instance
-                WebClient client = new WebClient();
-                // add an event handler
-                client.DownloadStringCompleted += JSON_DownloadStringCompleted;
-            
-                //user input
-                var userInput = textBoxLocation.Text;
+            //user input
+            var userInput = textBoxLocation.Text;
 
+            //check that user has actually inputted some location
+            if (String.IsNullOrEmpty(userInput))
+            {
+                //beware of error from API 8
+                MessageBox.Show("Please input a location!");
+            }
+            else
+            {
                 // fire the event 
-                if (String.IsNullOrEmpty(userInput))
-                {
-                    MessageBox.Show("Please input a location!");
-                }
-                else
-                {
-                    client.DownloadStringAsync(new Uri("http://api.openweathermap.org/data/2.5/find?q=" + userInput + "&type=like&cnt=4&units=metric"));
-                }
+                MakeJsonQuery(JSON_FindCityStringCompleted, new Uri("http://api.openweathermap.org/data/2.5/find?q=" + userInput + "&type=like&cnt=4&units=metric"));
+            }
         }
 
         //application layer service
-        void JSON_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        void JSON_FindCityStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             List<City> cityList;
             // make sure everything is working correctly
@@ -83,11 +80,22 @@ namespace aWeatherApp
                             myListPicker.IsEnabled = true;
                             myListPicker.Open();
                         }
+                        else if (obj.CityCount == 0)
+                        {
+                            MessageBox.Show("Cannot find any City, specify search term");
+                            buttonJSON.IsEnabled = true;
+                        }
                         else
                         {
-                            App.CityModel = obj.Cities.FirstOrDefault();
-
-                            NavigateToWeatherInfoPage();
+                            //so we have only a single city, use it..
+                            var cityToUse = obj.Cities.FirstOrDefault();
+                            
+                            if (cityToUse != null && cityToUse.Id > 0)
+                            {
+                                App.CityModel = cityToUse;
+                                //start another query for weather forecast
+                                MakeJsonQuery(JSON_WeatherForeCastCompleted, new Uri("http://api.openweathermap.org/data/2.5/forecast/daily?id=" + cityToUse.Id.ToString() + "&units=metric&cnt=7"));
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -103,6 +111,60 @@ namespace aWeatherApp
             }
         }
 
+        private void JSON_WeatherForeCastCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            // make sure everything is working correctly
+            if ((e.Result != null) && (e.Error == null))
+            {
+                string jsonString = e.Result;
+
+                //load into memory stream
+                using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonString)))
+                {
+                    ForecastList obj;
+
+                    //parse into jsonser
+                    // note that to using System.Runtime.Serialization.Json
+                    // need to add reference System.Servicemodel.Web
+                    var ser = new DataContractJsonSerializer(typeof(ForecastList));
+
+                    try
+                    {
+                        obj = (ForecastList)ser.ReadObject(ms);
+                        App.ForeCastModel = obj;
+                        NavigateToWeatherInfoPage();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Please input more letters");
+                        System.Diagnostics.Debug.WriteLine(ex.Message);
+                    }
+                }
+            }
+            else if (e.Error != null)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Error.Message);
+            }
+
+            buttonJSON.IsEnabled = true;
+        }
+
+        private void MakeJsonQuery(DownloadStringCompletedEventHandler completedEventHandler, Uri downloadFromUri)
+        {
+            //disable button to prevent multiple query firing..
+            buttonJSON.IsEnabled = false;
+
+            // create an instance
+            WebClient client = new WebClient();
+            
+            // add an event handler
+            client.DownloadStringCompleted += completedEventHandler;
+
+            //make actual query
+            client.DownloadStringAsync(downloadFromUri);
+        }
+
+
         #endregion JSON
 
         private void MyListPicker_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -113,11 +175,14 @@ namespace aWeatherApp
             if (myList.IsEnabled)
             {
                 //real selection made
-                App.CityModel = (City)myList.SelectedItem;
+                var selectedCity = (City)myList.SelectedItem;
+                App.CityModel = selectedCity;
+
+                MakeJsonQuery(JSON_WeatherForeCastCompleted, new Uri("http://api.openweathermap.org/data/2.5/forecast/daily?id=" + selectedCity.Id.ToString() + "&units=metric&cnt=7"));
 
                 myList.IsEnabled = false;
 
-                NavigateToWeatherInfoPage();
+                //NavigateToWeatherInfoPage();
             }
         }
 

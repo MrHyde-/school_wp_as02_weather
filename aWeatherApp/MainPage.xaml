@@ -23,8 +23,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="akWeather" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="WeathApp" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -32,7 +32,7 @@
             <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,10,0,0" Name="textBlock1" Text="Location" VerticalAlignment="Top" />
             <TextBox Height="72" HorizontalAlignment="Left" Margin="0,26,0,0" Name="textBoxLocation" Text="" VerticalAlignment="Top" Width="460" />
             
-            <Button Content="TryJSON" Height="72" HorizontalAlignment="Left" Margin="0,92,0,0" Name="buttonJSON" VerticalAlignment="Top" Width="460" Click="HandleJSON" />
+            <Button Content="ShowWeather" Height="72" HorizontalAlignment="Left" Margin="0,92,0,0" Name="buttonJSON" VerticalAlignment="Top" Width="460" Click="HandleJSON" />
         </Grid>
 
         <StackPanel x:Name="pickerPanel" Grid.Row="2" Margin="12,200,0,28" Visibility="Collapsed">
