@@ -8,8 +8,12 @@ namespace aWeatherApp
 {
     public partial class App
     {
+        public static string CityKey = "akCITY";
+        public static string ForecastKey = "akCityFORECAST";
+        public static string SearchTermKey = "akAPI8Input";
+
         /// <summary>
-        /// App level Weather instance
+        /// App level City instance
         /// Because Json returns it straight, we don't want to fetch it over again..
         /// </summary>
         private static City _city;
@@ -42,6 +46,23 @@ namespace aWeatherApp
                 return _forecasts;
             }
             set { _forecasts = value; }
+        }
+
+        /// <summary>
+        /// App level search term instance
+        /// </summary>
+        private static string _userSearchTerm;
+        public static string UserSearchTerm
+        {
+            get
+            {
+                if (_userSearchTerm == null)
+                {
+                    _userSearchTerm = string.Empty;
+                }
+                return _userSearchTerm;
+            }
+            set { _userSearchTerm = value; }
         }
 
         /// <summary>

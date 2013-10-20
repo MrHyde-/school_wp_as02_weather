@@ -21,6 +21,11 @@ namespace aWeatherApp
         }
 
         #region JSON
+        /// <summary>
+        /// Event for pressing the get weather button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HandleJSON(object sender, RoutedEventArgs e)
         {
             //user input
@@ -34,13 +39,17 @@ namespace aWeatherApp
             }
             else
             {
-                // fire the event 
+                //send handler and uri to next method 
                 MakeJsonQuery(JSON_FindCityStringCompleted, new Uri("http://api.openweathermap.org/data/2.5/find?q=" + userInput + "&type=like&cnt=4&units=metric"));
             }
         }
 
-        //application layer service
-        void JSON_FindCityStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        /// <summary>
+        /// Event for handling city finding
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void JSON_FindCityStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             List<City> cityList;
             // make sure everything is working correctly
@@ -111,6 +120,11 @@ namespace aWeatherApp
             }
         }
 
+        /// <summary>
+        /// Event for handling city forecast get..
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void JSON_WeatherForeCastCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             // make sure everything is working correctly
@@ -149,6 +163,11 @@ namespace aWeatherApp
             buttonJSON.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Event for making the actual query
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MakeJsonQuery(DownloadStringCompletedEventHandler completedEventHandler, Uri downloadFromUri)
         {
             //disable button to prevent multiple query firing..
@@ -163,37 +182,73 @@ namespace aWeatherApp
             //make actual query
             client.DownloadStringAsync(downloadFromUri);
         }
-
-
         #endregion JSON
 
+        /// <summary>
+        /// Event for handling correct city selection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MyListPicker_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //sender to local variable
             ListPicker myList = (sender as ListPicker);
 
             //I want this to react only if user really makes the selection
             if (myList.IsEnabled)
             {
-                //real selection made
+                //real selection has been made
                 var selectedCity = (City)myList.SelectedItem;
                 App.CityModel = selectedCity;
 
+                //fetch weather forecast using city id..
                 MakeJsonQuery(JSON_WeatherForeCastCompleted, new Uri("http://api.openweathermap.org/data/2.5/forecast/daily?id=" + selectedCity.Id.ToString() + "&units=metric&cnt=7"));
 
                 myList.IsEnabled = false;
-
-                //NavigateToWeatherInfoPage();
             }
         }
 
+        /// <summary>
+        /// Event for navigating to weather page. This should not be anymore own method because it is used only once, but it is nicer like this..
+        /// </summary>
         private void NavigateToWeatherInfoPage()
         {
             NavigationService.Navigate(new Uri("/WeatherInfoPage.xaml", UriKind.Relative));
         }
 
-        private void MyListPicker_OnUnloaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Event for navigation away from startpage.. storing user inputted string
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)
         {
-            
+            //get search term and save it
+            App.UserSearchTerm = textBoxLocation.Text;
+            State[App.SearchTermKey] = App.UserSearchTerm;
+        }
+
+        /// <summary>
+        /// Event for navigating to startpage.. restoring user inputted string
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            //if app level var has not got any terms..
+            if (String.IsNullOrEmpty(App.UserSearchTerm))
+            {
+                //if state does not contain a key term has not been setted yet (first load)
+                if (State.ContainsKey(App.SearchTermKey))
+                {
+                    //restore search term from state to app level
+                    App.UserSearchTerm = (String)State[App.SearchTermKey];
+                }
+            }
+
+            //if there is no active search term but there is one on app level, restore it to the search box..
+            if(String.IsNullOrEmpty(textBoxLocation.Text) && String.IsNullOrEmpty(App.UserSearchTerm) == false)
+            {
+                textBoxLocation.Text = App.UserSearchTerm;
+            }
         }
     }
 }

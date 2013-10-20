@@ -29,14 +29,14 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,10,0,0" Name="textBlock1" Text="Location" VerticalAlignment="Top" />
+            <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,10,0,0" Name="textBlockLocationTitle" Text="Location" VerticalAlignment="Top" />
             <TextBox Height="72" HorizontalAlignment="Left" Margin="0,26,0,0" Name="textBoxLocation" Text="" VerticalAlignment="Top" Width="460" />
             
             <Button Content="ShowWeather" Height="72" HorizontalAlignment="Left" Margin="0,92,0,0" Name="buttonJSON" VerticalAlignment="Top" Width="460" Click="HandleJSON" />
         </Grid>
 
         <StackPanel x:Name="pickerPanel" Grid.Row="2" Margin="12,200,0,28" Visibility="Collapsed">
-            <toolkit:ListPicker x:Name="myListPicker" Header="Specify location" ExpansionMode="FullscreenOnly" IsEnabled="False" SelectionMode="Single" SelectionChanged="MyListPicker_OnSelectionChanged" Unloaded="MyListPicker_OnUnloaded">
+            <toolkit:ListPicker x:Name="myListPicker" Header="Specify location" ExpansionMode="FullscreenOnly" IsEnabled="False" SelectionMode="Single" SelectionChanged="MyListPicker_OnSelectionChanged">
                 <toolkit:ListPicker.FullModeItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="16 21 0 20">

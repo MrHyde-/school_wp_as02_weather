@@ -20,7 +20,7 @@ namespace aWeatherApp.Model
         public Weather CurrentWeather { get; set; }
 
         [DataMember(Name = "sys")]
-        public LocationData SystemData { get; set; }
+        public CityCountry SystemData { get; set; }
 
         [DataMember(Name = "weather")]
         public List<WeatherExtraInfo> WeatherExtraInfos { get; set; }

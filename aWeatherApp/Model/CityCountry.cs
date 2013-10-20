@@ -3,7 +3,7 @@
 namespace aWeatherApp.Model
 {
     [DataContract]
-    public class LocationData
+    public class CityCountry
     {
         [DataMember(Name = "country")]
         public string Country { get; set; }
